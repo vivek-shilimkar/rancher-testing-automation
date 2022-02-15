@@ -9,14 +9,11 @@ variable "ami" {
 
 variable "instance_type" {
   type    = string
-  default = "t2.xlarge"
+  default = "t3a.xlarge"
 }
 
 variable "aws_region" {
   default = "us-east-2a"
-}
-
-variable "rancher_version" {
 }
 
 variable "subnet_id_for_ec2" {
@@ -27,4 +24,24 @@ variable "subnet_id_for_ec2" {
 variable "vpc_security_group_id_for_ec2" {
   description = "Security group to be attached to the EC2 instance"
   default     = "sg-c42018a9"
+}
+
+variable "rancher_version" {
+  description = "Rancher version to be installed"
+}
+
+variable "AWS_KEY_ID" {
+  description = "AWS KEY ID"
+}
+
+variable "AWS_SECRET_KEY_ID" {
+  description = "SECRET KEY ID"
+}
+
+variable "AWS_REGION" {
+  description = "AWS REGION"
+}
+
+variable "AWS_DEFAULT_OUTPUT" {
+  description = "AWS DEFAULT OUTPUT"
 }
