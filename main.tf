@@ -6,7 +6,6 @@ resource "aws_instance" "ec2-instance" {
   security_groups             = [var.vpc_security_group_id_for_ec2]
   associate_public_ip_address = true
   key_name                    = "amazon-key"
-  depends_on                  = [aws_key_pair.personal]
   ebs_block_device {
     device_name = "/dev/sda1"
     volume_size = 80
