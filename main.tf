@@ -35,7 +35,8 @@ resource "aws_instance" "ec2-instance" {
     sudo ./aws/install
     aws --version
     aws ec2 describe-instances --region us-east-2 --filters "Name=tag:Name,Values=vivek-rancher-Server" | grep -i publicipaddress | cut -d ":" -f 2 > temp_server_url
-    export server_url=`cat server_url`
-    sed -e 's/^"//' -e 's/"$//' <<< `echo ${$server_url::-1}` > rancher-url
+    export server_url=`cat temp_server_url`
+    sed -e 's/^"//' -e 's/"$//' <<< `echo ${server_url::-1}` > rancher-url
+    export temp=`cat rancher-url`
   EOF
 }
