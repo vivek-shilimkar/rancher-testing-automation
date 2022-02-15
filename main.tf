@@ -23,21 +23,21 @@ resource "aws_instance" "ec2-instance" {
     #sleep 200
     cd $HOME
     #Saves bootstrap password log line to dockerpassword.txt
-    docker logs $(docker ps --format '{{.Names}}') 2>&1 | grep "Bootstrap Password" > dockerpassword.txt
+    docker logs $(docker ps --format '{{.Names}}') 2>&1 | grep "Bootstrap Password" > $HOME/dockerpassword.txt
     #Saves bootstrap password log line to BootstrapPassword
-    cat dockerpassword.txt | grep -oP '(?<=Bootstrap Password: )[^ ]*' > bootstrappassword
-    export AWS_KEY_ID=${var.AWS_KEY_ID}
-    export AWS_SECRET_KEY_ID= ${var.AWS_SECRET_KEY_ID}
+    cat dockerpassword.txt | grep -oP '(?<=Bootstrap Password: )[^ ]*' > $HOME/bootstrappassword
+    export AWS_ACCESS_KEY_ID=${var.AWS_KEY_ID}
+    export AWS_SECRET_ACCESS_KEY=${var.AWS_SECRET_KEY_ID}
     export AWS_DEFAULT_OUTPUT= ${var.AWS_DEFAULT_OUTPUT}
-    export AWS_REGION= 'us-east-2'
+    export AWS_DEFAULT_REGION= 'us-east-2'
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     sudo apt install unzip
     unzip awscliv2.zip
     sudo ./aws/install
     aws --version
-    aws ec2 describe-instances --region us-east-2 --filters "Name=tag:Name,Values=vivek-rancher-Server" | grep -i publicipaddress | cut -d ":" -f 2 > temp_server_url
-    export server_url=`cat temp_server_url`
-    sed -e 's/^"//' -e 's/"$//' <<< `echo $${server_url::-1}` > rancher-url
-    export temp=`cat rancher-url`
+    aws ec2 describe-instances --region us-east-2 --filters "Name=tag:Name,Values=vivek-rancher-Server" | grep -i publicipaddress | cut -d ":" -f 2 > $HOME/temp_server_url
+    export server_url=`cat $HOME/temp_server_url`
+    sed -e 's/^"//' -e 's/"$//' <<< `echo $${$HOME/server_url::-1}` > $HOME/rancher-url
+    export temp=`cat $HOME/rancher-url`
   EOF
 }
