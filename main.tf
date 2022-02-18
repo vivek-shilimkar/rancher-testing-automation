@@ -21,11 +21,10 @@ resource "aws_instance" "ec2-instance" {
     #Install Rancher
     docker run -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged rancher/rancher:${var.rancher_version}
     sleep 180
-    cd $HOME
     #Saves bootstrap password log line to dockerpassword.txt
     docker logs $(docker ps --format '{{.Names}}') 2>&1 | grep "Bootstrap Password" > /tmp/dockerpassword.txt
     #Saves bootstrap password log line to BootstrapPassword
-    cat dockerpassword.txt | grep -oP '(?<=Bootstrap Password: )[^ ]*' > /tmp/bootstrappassword
+    cat /tmp/dockerpassword.txt | grep -oP '(?<=Bootstrap Password: )[^ ]*' > /tmp/bootstrappassword
     export AWS_ACCESS_KEY_ID=${var.AWS_KEY_ID}
     export AWS_SECRET_ACCESS_KEY=${var.AWS_SECRET_KEY_ID}
     export AWS_DEFAULT_OUTPUT= ${var.AWS_DEFAULT_OUTPUT}
@@ -36,7 +35,7 @@ resource "aws_instance" "ec2-instance" {
     sudo ./aws/install
     aws --version
     aws ec2 describe-instances --region us-east-2 --filters "Name=tag:Name,Values=vivek-rancher-Server" | grep -i publicipaddress | cut -d ":" -f 2 > /tmp/temp_server_url
-    export server_url=`cat $HOME/temp_server_url`
+    export server_url=`cat /tmp/temp_server_url`
     sed -e 's/^"//' -e 's/"$//' <<< `echo $${/tmp/server_url::-1}` > /tmp/rancher-url
     export temp=`cat /tmp/rancher-url`
   EOF
