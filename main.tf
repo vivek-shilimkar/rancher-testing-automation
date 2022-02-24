@@ -17,7 +17,7 @@ resource "aws_instance" "ec2-instance" {
     #!/bin/bash
     set -x
     curl https://releases.rancher.com/install-docker/20.10.sh | sh
-    sudo chmod 777 /var/run/docker.sock
+    sudo usermod -aG docker ubuntu
     #Install Rancher
     docker run -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged rancher/rancher:${var.rancher_version}
     sleep 60
