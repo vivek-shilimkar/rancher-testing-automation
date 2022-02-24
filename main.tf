@@ -31,7 +31,7 @@ resource "aws_instance" "ec2-instance" {
     sudo ./aws/install
     aws --version
     echo "export AWS_ACCESS_KEY_ID=${var.AWS_KEY_ID}" >> .bashrc
-    export AWS_SECRET_ACCESS_KEY=${var.AWS_SECRET_KEY_ID}
+    echo "export AWS_SECRET_ACCESS_KEY=${var.AWS_SECRET_KEY_ID}" >> .bashrc
     export AWS_DEFAULT_OUTPUT= ${var.AWS_DEFAULT_OUTPUT}
     export AWS_DEFAULT_REGION= 'us-east-2'
     aws ec2 describe-instances --region us-east-2 --filters "Name=tag:Name,Values=vivek-rancher-Server" | grep -i publicipaddress | cut -d ":" -f 2 > /tmp/temp_server_url
