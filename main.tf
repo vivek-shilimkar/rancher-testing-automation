@@ -30,7 +30,7 @@ resource "aws_instance" "ec2-instance" {
     unzip awscliv2.zip
     sudo ./aws/install
     aws --version
-    export AWS_ACCESS_KEY_ID=${var.AWS_KEY_ID}
+    echo "export AWS_ACCESS_KEY_ID=${var.AWS_KEY_ID}" >> .bashrc
     export AWS_SECRET_ACCESS_KEY=${var.AWS_SECRET_KEY_ID}
     export AWS_DEFAULT_OUTPUT= ${var.AWS_DEFAULT_OUTPUT}
     export AWS_DEFAULT_REGION= 'us-east-2'
