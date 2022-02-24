@@ -20,7 +20,7 @@ resource "aws_instance" "ec2-instance" {
     sudo chmod 777 /var/run/docker.sock
     #Install Rancher
     docker run -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged rancher/rancher:${var.rancher_version}
-    sleep 180
+    sleep 60
     #Saves bootstrap password log line to dockerpassword.txt
     docker logs $(docker ps --format '{{.Names}}') 2>&1 | grep "Bootstrap Password" > /tmp/dockerpassword.txt
     #Saves bootstrap password log line to BootstrapPassword
