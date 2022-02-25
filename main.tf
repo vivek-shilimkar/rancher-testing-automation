@@ -1,3 +1,8 @@
+resource "aws_key_pair" "personal" {
+  key_name   = "amazon-key"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDekhpzJrZjMUD1G7lJQJVI54m6yCu0HcP6FminKPJwX80aKKsjBvTOOBP7NfK3OmitZFD5HyfgHc+uMWdzog30ezim2a6TKiqGCHgvnppXwtdEdJEQwne2dh8eXp6lX1MNg4TQUFqx7YPmwDpmNEtTnb2Et4Zh2R3/xDlEsXtUBvlu3jNKNUqALbchEjdq+G/CciaMYlI3TsA0t0VRp9CcjmBeDSn7RKKCaO9DPWjm0qR/YABU5zYU+9mF32A/QJME4d6WTV1oPNudR1pvFwYpblq7+2UFf2jaEW1CKDXtc1HF7SuFFiWJL08AEt7bnxI+vFWhZ9GulA2/OO6IFAMkFpL1BfAwzPrX01pcQvxA17pQd4lfOGaHozILnnUaL8h9w3zSiKqu72dr2DihHLowff+RyUB8tI0Y8aTVGya4bEOArV+TVSv8A+vem36LKlJh0JWKpaipsFzDGPkF4WkxSWNFwiULDUEIKrRbHZmHEE01TfijM8o4cSwZvEao/8M= infracloud@infracloud-ThinkPad-E14-Gen-2"
+}
+
 resource "aws_instance" "ec2-instance" {
 
   ami                         = var.ami
