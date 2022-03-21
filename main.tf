@@ -27,10 +27,6 @@ resource "aws_instance" "ec2-instance" {
     #Install Rancher
     docker run -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged -e CATTLE_BOOTSTRAP_PASSWORD=rancher#1234 rancher/rancher:${var.rancher_version}
     sleep 300
-    #Saves bootstrap password log line to dockerpassword.txt
-    docker logs $(docker ps --format '{{.Names}}') 2>&1 | grep "Bootstrap Password" > dockerpassword.txt
-    #Saves bootstrap password log line to BootstrapPassword
-    cat dockerpassword.txt | grep -oP '(?<=Bootstrap Password: )[^ ]*' > bootstrappassword
     export AWS_KEY_ID=${var.AWS_KEY_ID}
     export AWS_SECRET_KEY_ID= ${var.AWS_SECRET_KEY_ID}
     export AWS_DEFAULT_OUTPUT= ${var.AWS_DEFAULT_OUTPUT}
