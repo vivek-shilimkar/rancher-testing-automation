@@ -1,10 +1,10 @@
 variable "name" {
-  default = "vivek-rancher-Server"
+  description = "AWS Instance name tag"
 }
 
 variable "ami" {
   type    = string
-  default = "ami-0ecaf76771eb5cb31"
+  default = "ami-0629230e074c580f2"
 }
 
 variable "instance_type" {

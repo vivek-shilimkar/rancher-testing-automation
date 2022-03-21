@@ -1,0 +1,60 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Terraform-apply
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  workflow_dispatch:
+    inputs:
+      rancher_version:
+        description: 'Type in rancher version to be installed'
+        default: 'stable'
+      name:
+        description: 'Name tag of Instance'
+        default: vivek-rancher-server
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ID }}
+      PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
+      AWS_REGION: 'us-east-2'
+      TF_VAR_rancher_version: ${{ github.event.inputs.rancher_version }}
+      TF_VAR_name: ${{ github.event.inputs.name }}
+      TF_VAR_AWS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+      TF_VAR_AWS_SECRET_KEY_ID: ${{ secrets.AWS_SECRET_ID }}
+      TF_VAR_AWS_REGION: 'us-east-2'
+      TF_VAR_AWS_DEFAULT_OUTPUT: 'json'
+     # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1.2.1
+                          
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -out=./terraform-file.tfstate
+        continue-on-error: true
+        
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+        
+      - name: Terraform Apply ./terraform-file.tfstate
+        id: apply
+        run: terraform apply -auto-approve
+        
+   
