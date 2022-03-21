@@ -25,7 +25,7 @@ resource "aws_instance" "ec2-instance" {
     sleep 60
     sudo usermod -aG docker ubuntu
     #Install Rancher
-    docker run -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged rancher/rancher:${var.rancher_version}
+    docker run -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged -e CATTLE_BOOTSTRAP_PASSWORD=rancher#1234 rancher/rancher:${var.rancher_version}
     sleep 60
     #Saves bootstrap password log line to dockerpassword.txt
     docker logs $(docker ps --format '{{.Names}}') 2>&1 | grep "Bootstrap Password" > /tmp/dockerpassword.txt
