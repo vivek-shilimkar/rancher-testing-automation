@@ -25,7 +25,7 @@ resource "aws_instance" "ec2-instance" {
     curl https://releases.rancher.com/install-docker/20.10.sh | sh
     sudo chmod 777 /var/run/docker.sock
     #Install Rancher
-    docker run -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged rancher/rancher:${var.rancher_version}
+    docker run -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged -e CATTLE_BOOTSTRAP_PASSWORD=rancher#1234 rancher/rancher:${var.rancher_version}
     sleep 300
     #Saves bootstrap password log line to dockerpassword.txt
     docker logs $(docker ps --format '{{.Names}}') 2>&1 | grep "Bootstrap Password" > dockerpassword.txt
