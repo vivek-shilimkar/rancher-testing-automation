@@ -26,7 +26,6 @@ resource "aws_instance" "ec2-instance" {
     sudo chmod 777 /var/run/docker.sock
     #Install Rancher
     docker run -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged -e CATTLE_BOOTSTRAP_PASSWORD=rancher#1234 rancher/rancher:${var.rancher_version}
-    sleep 300
     export AWS_KEY_ID=${var.AWS_KEY_ID}
     export AWS_SECRET_KEY_ID= ${var.AWS_SECRET_KEY_ID}
     export AWS_DEFAULT_OUTPUT= ${var.AWS_DEFAULT_OUTPUT}
