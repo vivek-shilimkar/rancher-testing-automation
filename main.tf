@@ -26,15 +26,15 @@ resource "aws_instance" "ec2-instance" {
     sudo chmod 777 /var/run/docker.sock
     #Install Rancher
     docker run -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged -e CATTLE_BOOTSTRAP_PASSWORD=rancher#1234 rancher/rancher:${var.rancher_version}
-    export AWS_KEY_ID=${var.AWS_KEY_ID}
-    export AWS_SECRET_KEY_ID= ${var.AWS_SECRET_KEY_ID}
-    export AWS_DEFAULT_OUTPUT= ${var.AWS_DEFAULT_OUTPUT}
-    export AWS_REGION= 'us-east-2'
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     sudo apt install unzip
     unzip awscliv2.zip
     sudo ./aws/install
     aws --version
+    export AWS_KEY_ID=${var.AWS_KEY_ID}
+    export AWS_SECRET_KEY_ID= ${var.AWS_SECRET_KEY_ID}
+    export AWS_DEFAULT_OUTPUT= ${var.AWS_DEFAULT_OUTPUT}
+    export AWS_REGION= 'us-east-2'
     aws ec2 describe-instances --region us-east-2 --filters "Name=tag:Name,Values=vivek-rancher-Server" | grep -i publicipaddress | cut -d ":" -f 2 | cut -c 3-15 > server_url
   EOF
 }
