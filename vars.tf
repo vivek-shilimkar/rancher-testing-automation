@@ -13,7 +13,7 @@ variable "instance_type" {
 }
 
 variable "aws_region" {
-  default = "us-east-2a"
+  default = "us-west-2a"
 }
 
 variable "subnet_id_for_ec2" {
