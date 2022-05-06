@@ -25,7 +25,7 @@ resource "aws_instance" "ec2-instance" {
     curl https://releases.rancher.com/install-docker/20.10.sh | sh
     sudo chmod 777 /var/run/docker.sock
     #Install Rancher
-    docker run -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged -e CATTLE_BOOTSTRAP_PASSWORD=rancher#1234 rancher/rancher:${var.rancher_version}
+    docker run -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged -e CATTLE_BOOTSTRAP_PASSWORD=${var.btpassword} rancher/rancher:${var.rancher_version}
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     sudo apt install unzip
     unzip awscliv2.zip
