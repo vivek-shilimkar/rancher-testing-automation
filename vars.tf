@@ -34,7 +34,7 @@ variable "AWS_KEY_ID" {
   description = "AWS KEY ID"
 }
 
-variable "AWS_SECRET_KEY_ID" {
+variable "AWS_SECRET_ACCESS_KEY" {
   description = "SECRET KEY ID"
 }
 
