@@ -56,6 +56,10 @@ resource "aws_instance" "ec2-instance" {
     USERID=curl -s -u "$APIKEY" https://$URL/v3/user -H 'content-type: application/json' --data-binary '{"type":"user","username":"$USERNAME","password":"$PASSWORD","name":"vivek"}' --insecure | jq -r .id
     curl -s -u $APIKEY https://$URL/v3/globalrolebinding -H 'content-type: application/json' --data-binary '{"type":"globalRoleBinding","globalRoleId":"user","userId":"'$USERID'"}' --insecure
 
+    # Login as user and get usertoken
+    LOGINRESPONSE=`curl -s $RANCHERENDPOINT/v3-public/localProviders/local?action=login -H 'content-type: application/json' --data-binary '{"username":"'$USERNAME'","password":"'$PASSWORD'"}' --insecure`
+    USERTOKEN=`echo $LOGINRESPONSE | jq -r .token`
+
     # Set server-url
     # curl -k -s 'https://127.0.0.1/v3/settings/server-url' -H 'Content-Type: application/json' -H "Authorization: Bearer $APIKEY" -X PUT --data-binary '{"name":"server-url","value":"https://your-rancher.com/"}'
 
