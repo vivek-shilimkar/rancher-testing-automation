@@ -34,6 +34,7 @@ resource "aws_instance" "ec2-instance" {
     sudo su ubuntu
     cd /home/ubuntu
     mkdir .aws
+    sudo chmod 777 -R .aws
     echo [default] > ~/.aws/credentials
     echo ${var.AWS_KEY_ID} >> ~/.aws/credentials
     echo ${var.AWS_SECRET_KEY_ID} >> ~/.aws/credentials
