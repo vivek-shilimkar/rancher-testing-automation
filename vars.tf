@@ -46,6 +46,6 @@ variable "AWS_DEFAULT_OUTPUT" {
   description = "AWS DEFAULT OUTPUT"
 }
 
-variable "btpassword" {
+variable "BTPASSWORD" {
   description = "Bootstrap Password"
 }
