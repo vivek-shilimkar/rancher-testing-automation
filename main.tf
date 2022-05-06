@@ -27,6 +27,8 @@ resource "aws_instance" "ec2-instance" {
     #Install Rancher
     docker run -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged -e CATTLE_BOOTSTRAP_PASSWORD=${var.BTPASSWORD} rancher/rancher:${var.rancher_version}
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    sleep 600
+    
     sudo apt install unzip
     unzip awscliv2.zip
     sudo ./aws/install
