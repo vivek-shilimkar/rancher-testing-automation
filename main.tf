@@ -31,7 +31,8 @@ resource "aws_instance" "ec2-instance" {
     unzip awscliv2.zip
     sudo ./aws/install
     aws --version
-    mkdir ~/.aws
+    cd $HOME
+    mkdir .aws
     echo [default] > ~/.aws/credentials
     echo ${var.AWS_KEY_ID} >> ~/.aws/credentials
     echo ${var.AWS_SECRET_KEY_ID} >> ~/.aws/credentials
