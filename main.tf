@@ -31,6 +31,13 @@ resource "aws_instance" "ec2-instance" {
     unzip awscliv2.zip
     sudo ./aws/install
     aws --version
+    mkdir ~/.aws/
+    echo [default] > ~/.aws/credentials
+    echo ${var.AWS_KEY_ID} >> ~/.aws/credentials
+    echo ${var.AWS_SECRET_KEY_ID} >> ~/.aws/credentials
+    echo [default] > ~/.aws/config
+    echo "region = us-east-2" >> ~/.aws/config
+    echo "output = json" >> ~/.aws/config
     aws --profile default configure set AWS_ACCESS_KEY_ID ${var.AWS_KEY_ID}
     aws --profile default configure set AWS_SECRET_KEY_ID ${var.AWS_SECRET_KEY_ID}
     aws --profile default configure set AWS_DEFAULT_OUTPUT ${var.AWS_DEFAULT_OUTPUT}
