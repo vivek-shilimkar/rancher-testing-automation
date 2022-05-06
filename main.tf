@@ -50,8 +50,7 @@ resource "aws_instance" "ec2-instance" {
 
     # Create API key good forever
     APIKEY=`curl -k -s 'https://$URL/v3/token' -H 'Content-Type: application/json' -H "Authorization: Bearer $LOGINTOKEN" --data-binary '{"type":"token","description":"for scripts and stuff"}' | jq -r .token`
-    # echo "API Key: ${APIKEY}"
-
+   
     #create new user and assign role binding
     USERID=curl -s -u "$APIKEY" https://$URL/v3/user -H 'content-type: application/json' --data-binary '{"type":"user","username":"$USERNAME","password":"$PASSWORD","name":"vivek"}' --insecure | jq -r .id
     curl -s -u $APIKEY https://$URL/v3/globalrolebinding -H 'content-type: application/json' --data-binary '{"type":"globalRoleBinding","globalRoleId":"user","userId":"'$USERID'"}' --insecure
