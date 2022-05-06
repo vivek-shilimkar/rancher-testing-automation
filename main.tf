@@ -31,18 +31,8 @@ resource "aws_instance" "ec2-instance" {
     unzip awscliv2.zip
     sudo ./aws/install
     aws --version
-    sudo su ubuntu
-    cd /home/ubuntu
-    mkdir .aws
-    sudo chmod 777 -R .aws
-    echo [default] > ~/.aws/credentials
-    echo ${var.AWS_KEY_ID} >> ~/.aws/credentials
-    echo ${var.AWS_SECRET_KEY_ID} >> ~/.aws/credentials
-    echo [default] > ~/.aws/config
-    echo "region = us-east-2" >> ~/.aws/config
-    echo "output = json" >> ~/.aws/config
     aws --profile default configure set AWS_ACCESS_KEY_ID ${var.AWS_KEY_ID}
-    aws --profile default configure set AWS_SECRET_KEY_ID ${var.AWS_SECRET_KEY_ID}
+    aws --profile default configure set AWS_SECRET_ACCESS_KEY ${var.AWS_SECRET_KEY_ID}
     aws --profile default configure set AWS_DEFAULT_OUTPUT ${var.AWS_DEFAULT_OUTPUT}
     aws --profile default configure set AWS_REGION us-east-2
     aws ec2 describe-instances --region us-east-2 --filters "Name=tag:Name,Values=${var.name}" | grep -i publicipaddress | cut -d ":" -f 2 | cut -c 3-15 > /tmp/server_url
