@@ -32,7 +32,7 @@ resource "aws_instance" "ec2-instance" {
     sudo ./aws/install
     aws --version
     aws --profile default configure set AWS_ACCESS_KEY_ID ${var.AWS_KEY_ID}
-    aws --profile default configure set AWS_SECRET_ACCESS_KEY ${var.AWS_SECRET_KEY_ID}
+    aws --profile default configure set AWS_SECRET_ACCESS_KEY ${var.AWS_SECRET_ACCESS_KEY}
     aws --profile default configure set AWS_DEFAULT_OUTPUT ${var.AWS_DEFAULT_OUTPUT}
     aws --profile default configure set AWS_REGION us-east-2
     aws ec2 describe-instances --region us-east-2 --filters "Name=tag:Name,Values=${var.name}" | grep -i publicipaddress | cut -d ":" -f 2 | cut -c 3-15 > /tmp/server_url
