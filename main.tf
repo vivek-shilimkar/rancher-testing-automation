@@ -36,17 +36,25 @@ resource "aws_instance" "ec2-instance" {
     aws --profile default configure set AWS_DEFAULT_OUTPUT ${var.AWS_DEFAULT_OUTPUT}
     aws --profile default configure set AWS_REGION us-east-2
     aws ec2 describe-instances --region us-east-2 --filters "Name=tag:Name,Values=${var.name}" | grep -i publicipaddress | cut -d '"' -f 4 > /tmp/server_url
-    export url=`cat /tmp/server_url`
+    URL=`cat /tmp/server_url`
+    RANCHERENDPOINT=https://$URL/v3
+    USERNAME=testuser
+    PASSWORD=rancher#1234
+    GLOBALROLE=user
 
     # Login token good for 1 minute
-    LOGINTOKEN=`curl -k -s 'https://$url/v3-public/localProviders/local?action=login' -H 'content-type: application/json' --data-binary '{"username":"admin","password":"${var.BTPASSWORD}","ttl":60000}' | jq -r .token`
+    LOGINTOKEN=`curl -k -s 'https://$URL/v3-public/localProviders/local?action=login' -H 'content-type: application/json' --data-binary '{"username":"admin","password":"${var.BTPASSWORD}","ttl":60000}' | jq -r .token`
 
     # Change password
-    # curl -k -s 'https://$url/v3/users?action=changepassword' -H 'Content-Type: application/json' -H "Authorization: Bearer $LOGINTOKEN" --data-binary '{"currentPassword":"admin","newPassword":"something better"}'
+    # curl -k -s 'https://$URL/v3/users?action=changepassword' -H 'Content-Type: application/json' -H "Authorization: Bearer $LOGINTOKEN" --data-binary '{"currentPassword":"admin","newPassword":"something better"}'
 
     # Create API key good forever
-    APIKEY=`curl -k -s 'https://$url/v3/token' -H 'Content-Type: application/json' -H "Authorization: Bearer $LOGINTOKEN" --data-binary '{"type":"token","description":"for scripts and stuff"}' | jq -r .token`
+    APIKEY=`curl -k -s 'https://$URL/v3/token' -H 'Content-Type: application/json' -H "Authorization: Bearer $LOGINTOKEN" --data-binary '{"type":"token","description":"for scripts and stuff"}' | jq -r .token`
     echo "API Key: ${APIKEY}"
+
+    #create new user and assign role binding
+    USERID=curl -s -u "$APIKEY" https://$URL/v3/user -H 'content-type: application/json' --data-binary '{"type":"user","username":"$USERNAME","password":"$PASSWORD","name":"vivek"}' --insecure | jq -r .id
+    curl -s -u $APIKEY https://$URL/v3/globalrolebinding -H 'content-type: application/json' --data-binary '{"type":"globalRoleBinding","globalRoleId":"user","userId":"'$USERID'"}' --insecure
 
     # Set server-url
     # curl -k -s 'https://127.0.0.1/v3/settings/server-url' -H 'Content-Type: application/json' -H "Authorization: Bearer $APIKEY" -X PUT --data-binary '{"name":"server-url","value":"https://your-rancher.com/"}'
