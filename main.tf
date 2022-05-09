@@ -43,6 +43,8 @@ resource "aws_instance" "ec2-instance" {
     USERNAME=testuser
     PASSWORD=rancher#1234
     GLOBALROLE=user
+    
+    sudo snap install jq
 
     # Login token good for 1 minute
     LOGINTOKEN=`curl -k -s 'https://$URL/v3-public/localProviders/local?action=login' -H 'content-type: application/json' --data-binary '{"username":"admin","password":"${var.BTPASSWORD}","ttl":60000}' | jq -r .token`
