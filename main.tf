@@ -64,8 +64,8 @@ resource "aws_instance" "ec2-instance" {
     LOGINRESPONSE=`curl -s 'https://'"$URL"'/v3-public/localProviders/local?action=login' -H 'content-type: application/json' --data-binary '{"username":"'"$USERNAME"'","password":"'"$PASSWORD"'"}' --insecure`
     USERTOKEN=`echo $LOGINRESPONSE | jq -r .token`
     
-    echo $APIKEY > /home/ubuntu/Tokens
-    echo $USERTOKEN >> /home/ubuntu/Tokens
+    echo $APIKEY > /tmp/Tokens
+    echo $USERTOKEN >> /tmp/Tokens
 
     # Set server-url
     # curl -k -s 'https://127.0.0.1/v3/settings/server-url' -H 'Content-Type: application/json' -H "Authorization: Bearer $APIKEY" -X PUT --data-binary '{"name":"server-url","value":"https://your-rancher.com/"}'
