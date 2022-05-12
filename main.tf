@@ -48,20 +48,20 @@ resource "aws_instance" "ec2-instance" {
     
 
     # Login token good for 1 minute
-    LOGINTOKEN=`curl -k -s 'https://$URL/v3-public/localProviders/local?action=login' -H 'content-type: application/json' --data-binary '{"username":"admin","password":"${var.BTPASSWORD}","ttl":60000}' | jq -r .token`
-
+    LOGINTOKEN=`curl -k -s 'https://'"$URL"'/v3-public/localProviders/local?action=login' -H 'content-type: application/json' --data-binary '{"username":"admin","password":"'"$PASSWORD"'","ttl":60000}' | jq -r .token`
+    
     # Change password
-    # curl -k -s 'https://$URL/v3/users?action=changepassword' -H 'Content-Type: application/json' -H "Authorization: Bearer $LOGINTOKEN" --data-binary '{"currentPassword":"admin","newPassword":"something better"}'
+    # curl -k -s 'https://'"$URL"'/v3/users?action=changepassword' -H 'Content-Type: application/json' -H "Authorization: Bearer $LOGINTOKEN" --data-binary '{"currentPassword":"admin","newPassword":"something better"}'
 
     # Create API key good forever
-    APIKEY=`curl -k -s 'https://$URL/v3/token' -H 'Content-Type: application/json' -H "Authorization: Bearer $LOGINTOKEN" --data-binary '{"type":"token","description":"for scripts and stuff"}' | jq -r .token`
+    APIKEY=`curl -k -s 'https://'"$URL"'/v3/token' -H 'Content-Type: application/json' -H "Authorization: Bearer $LOGINTOKEN" --data-binary '{"type":"token","description":"for scripts and stuff"}' | jq -r .token`
    
     #create new user and assign role binding
-    USERID=curl -s -u "$APIKEY" https://$URL/v3/user -H 'content-type: application/json' --data-binary '{"type":"user","username":"$USERNAME","password":"$PASSWORD","name":"vivek"}' --insecure | jq -r .id
-    curl -s -u $APIKEY https://$URL/v3/globalrolebinding -H 'content-type: application/json' --data-binary '{"type":"globalRoleBinding","globalRoleId":"user","userId":"'$USERID'"}' --insecure
+    USERID=`curl -s -u "$APIKEY" 'https://'"$URL"'/v3/user' -H 'content-type: application/json' --data-binary '{"type":"user","username":"'"$USERNAME"'","password":"'"$PASSWORD"'","name":"vivek"}' --insecure | jq -r .id`
+    curl -s -u "$APIKEY" https://$URL/v3/globalrolebinding -H 'content-type: application/json' --data-binary '{"type":"globalRoleBinding","globalRoleId":"user","userId":"'"$USERID"'"}' --insecure
 
     # Login as user and get usertoken
-    LOGINRESPONSE=`curl -s $RANCHERENDPOINT/v3-public/localProviders/local?action=login -H 'content-type: application/json' --data-binary '{"username":"'$USERNAME'","password":"'$PASSWORD'"}' --insecure`
+    LOGINRESPONSE=`curl -s 'https://'"$URL"'/v3-public/localProviders/local?action=login' -H 'content-type: application/json' --data-binary '{"username":"'"$USERNAME"'","password":"'"$PASSWORD"'"}' --insecure`
     USERTOKEN=`echo $LOGINRESPONSE | jq -r .token`
     
     echo $APIKEY > /home/ubuntu/Tokens
