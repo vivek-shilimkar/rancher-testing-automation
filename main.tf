@@ -26,7 +26,7 @@ resource "aws_instance" "ec2-instance" {
       docker run -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged -e CATTLE_BOOTSTRAP_PASSWORD=${var.BTPASSWORD} rancher/rancher:${var.rancher_version}
     elif [ "${var.registry}" == "prime" ]; then
       #Install Rancher from prime repository
-      docker run -d --privileged --restart=unless-stopped -p 80:80 -p 443:443 -e CATTLE_AGENT_IMAGE=stgregistry.suse.com/rancher/rancher-agent:${var.rancher_version} stgregistry.suse.com/rancher/rancher:${var.rancher_version}
+      docker run -d --privileged --restart=unless-stopped -p 80:80 -p 443:443 -e CATTLE_BOOTSTRAP_PASSWORD=${var.BTPASSWORD} CATTLE_AGENT_IMAGE=stgregistry.suse.com/rancher/rancher-agent:${var.rancher_version} stgregistry.suse.com/rancher/rancher:${var.rancher_version}
     else
       echo "Invalid registry option. Exiting."
       exit 1
