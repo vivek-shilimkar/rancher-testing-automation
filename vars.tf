@@ -26,6 +26,10 @@ variable "vpc_security_group_id_for_ec2" {
   default     = "sg-c42018a9"
 }
 
+variable "registry" {
+  description = "Registry to install rancher from"
+}
+
 variable "rancher_version" {
   description = "Rancher version to be installed"
 }

@@ -7,9 +7,16 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   workflow_dispatch:
     inputs:
+      registry:
+        description: 'Type in registry to be used'
+        default: 'docker'
+        type: choice
+        options:
+          - 'docker'
+          - 'prime'
       rancher_version:
         description: 'Type in rancher version to be installed'
-        default: 'stable'
+        default: 'latest'
       name:
         description: 'Name tag of Instance'
         default: vivek-rancher-server
@@ -28,6 +35,7 @@ jobs:
       AWS_REGION: 'us-east-2'
       TF_VAR_rancher_version: ${{ github.event.inputs.rancher_version }}
       TF_VAR_name: ${{ github.event.inputs.name }}
+      TF_VAR_registry: ${{ github.event.inputs.registry }}
       TF_VAR_AWS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
       TF_VAR_AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ID }}
       TF_VAR_AWS_REGION: 'us-east-2'
@@ -36,6 +44,12 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+
+      - name: Debug Inputs
+        run: |
+          echo "Registry: ${{ github.event.inputs.Registry }}"
+          echo "Rancher Version: ${{ github.event.inputs.rancher_version }}"
+          echo "Name: ${{ github.event.inputs.name }}"
 
       # Runs a single command using the runners shell
       - name: Setup Terraform
