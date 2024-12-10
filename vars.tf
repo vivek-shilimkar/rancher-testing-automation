@@ -34,7 +34,7 @@ variable "rancher_version" {
   description = "Rancher version to be installed"
 }
 
-variable "AWS_KEY_ID" {
+variable "AWS_ACCESS_KEY_ID" {
   description = "AWS KEY ID"
 }
 
